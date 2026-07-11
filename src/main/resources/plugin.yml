@@ -2,7 +2,7 @@ name: PatchORE
 version: '1.0-SNAPSHOT'
 main: org.openredstone.PatchORE
 api-version: '1.21'
-depend: [ProtocolLib, NBTAPI]
+depend: [ProtocolLib]
 load: STARTUP
 authors: [ "Waffle [Wueffi]" ]
 description: A plugin with various patches specifically designed for ORE, now written in Kotlin

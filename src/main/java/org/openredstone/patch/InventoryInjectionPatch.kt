@@ -1,9 +1,11 @@
 package org.openredstone.patch
 
+import io.papermc.paper.datacomponent.DataComponentTypes
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEntityEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import org.openredstone.PatchORE
 
@@ -18,19 +20,18 @@ class InventoryInjectionPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
         }
 
         val targetEntity = event.rightClicked as? Player ?: return
-        val inventoryBefore = targetEntity.inventory.contents.map { it?.toString() ?: "EMPTY" }
 
-        plugin.server.scheduler.runTaskLater(plugin, Runnable {
-            val inventoryAfter = targetEntity.inventory.contents.map { it?.toString() ?: "EMPTY" }
+        val itemUsed = event.player.inventory.getItem(event.hand)
+        if (!isEquipOnInteract(itemUsed)) {
+            return
+        }
 
-            for (i in inventoryBefore.indices) {
-                if (inventoryBefore[i] == "EMPTY" && inventoryAfter[i] != "EMPTY") {
-                    targetEntity.inventory.clear(i)
+        sendMessage(targetEntity, "An item was blocked from being added to your inventory.")
 
-                    sendMessage(targetEntity, "An item was blocked from being added to your inventory.")
-                    return@Runnable
-                }
-            }
-        }, 1L)
+        event.isCancelled = true
+    }
+
+    private fun isEquipOnInteract(item: ItemStack): Boolean {
+        return item.getData(DataComponentTypes.EQUIPPABLE)?.equipOnInteract() ?: false
     }
 }

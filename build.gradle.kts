@@ -18,7 +18,6 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
     compileOnly("net.dmulloy2:ProtocolLib:5.4.0")
-    compileOnly("de.tr7zw:item-nbt-api-plugin:2.15.2")
     implementation(kotlin("stdlib"))
 }
 

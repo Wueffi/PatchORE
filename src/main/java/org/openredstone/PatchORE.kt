@@ -122,9 +122,8 @@ class PatchORE : JavaPlugin() {
         "deathpotions.max_duration" to 1000,
 
         // NBT options
-        "nbt.max_size_bytes" to 65536,  // 256 KB
+        "nbt.max_size_bytes" to 65536,  // 64 KB
         "nbt.max_lore_lines" to 3,
-        "nbt.forbidden_tags" to listOf("PublicBukkitValues", "CustomModelData", "equip_on_interact")
     )
 
     override fun onEnable() {
