@@ -9,9 +9,12 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import org.openredstone.PatchORE
 
 class PlayerInventoryPacketHandler(plugin: JavaPlugin) :
     PacketAdapter(plugin, ListenerPriority.HIGHEST, PacketType.Play.Client.ENTITY_NBT_QUERY) {
+
+    private val maxNbtBytes = PatchORE.config.getInt("nbt.max_size_bytes")
 
     override fun onPacketReceiving(event: PacketEvent) {
         if (event.packetType != PacketType.Play.Client.ENTITY_NBT_QUERY) {
@@ -19,7 +22,7 @@ class PlayerInventoryPacketHandler(plugin: JavaPlugin) :
         }
 
         val doubles = event.packet.doubles
-        if (doubles.read(0) < 2097151) {
+        if (doubles.read(0) < maxNbtBytes) {
             return
         }
 

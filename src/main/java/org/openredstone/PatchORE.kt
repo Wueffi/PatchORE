@@ -28,6 +28,7 @@ class PatchORE : JavaPlugin() {
         "patches.deathpotions" to true,
         "patches.void" to true,
         "patches.nbt" to true,
+        "patches.inventoryinjection" to true,
 
         // Fireworks options
         "fireworks.power" to 5,
@@ -118,7 +119,12 @@ class PatchORE : JavaPlugin() {
 
         // DeathPotion options
         "deathpotions.max_amplifier" to 32,
-        "deathpotions.max_duration" to 1000
+        "deathpotions.max_duration" to 1000,
+
+        // NBT options
+        "nbt.max_size_bytes" to 65536,  // 256 KB
+        "nbt.max_lore_lines" to 3,
+        "nbt.forbidden_tags" to listOf("PublicBukkitValues", "CustomModelData", "equip_on_interact")
     )
 
     override fun onEnable() {
@@ -148,6 +154,10 @@ class PatchORE : JavaPlugin() {
         }
         if (config.getBoolean("patches.nbt")) {
             protocolManager.addPacketListener(PlayerInventoryPacketHandler(this))
+            server.pluginManager.registerEvents(NBTPatch(this), this)
+        }
+        if (config.getBoolean("patches.inventoryinjection")) {
+            server.pluginManager.registerEvents(InventoryInjectionPatch(this), this)
         }
     }
 
