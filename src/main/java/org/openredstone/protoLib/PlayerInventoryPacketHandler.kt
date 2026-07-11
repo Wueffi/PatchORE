@@ -1,43 +1,46 @@
-package org.openredstone.protoLib;
+package org.openredstone.protoLib
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.reflect.StructureModifier;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.comphenix.protocol.PacketType
+import com.comphenix.protocol.events.ListenerPriority
+import com.comphenix.protocol.events.PacketAdapter
+import com.comphenix.protocol.events.PacketEvent
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.entity.Player
+import org.bukkit.plugin.java.JavaPlugin
 
-public class PlayerInventoryPacketHandler extends PacketAdapter {
+class PlayerInventoryPacketHandler(plugin: JavaPlugin) :
+    PacketAdapter(plugin, ListenerPriority.HIGHEST, PacketType.Play.Client.ENTITY_NBT_QUERY) {
 
-    private JavaPlugin plugin;
-
-    public PlayerInventoryPacketHandler(JavaPlugin plugin) {
-        super(plugin, ListenerPriority.HIGHEST, PacketType.Play.Client.ENTITY_NBT_QUERY);
-        this.plugin = plugin;
-    }
-
-    @Override
-    public void onPacketReceiving(PacketEvent event) {
-        if (event.getPacketType() != PacketType.Play.Client.ENTITY_NBT_QUERY) {
-            return;
+    override fun onPacketReceiving(event: PacketEvent) {
+        if (event.packetType != PacketType.Play.Client.ENTITY_NBT_QUERY) {
+            return
         }
-        StructureModifier<Double> doubles = event.getPacket().getDoubles();
+
+        val doubles = event.packet.doubles
         if (doubles.read(0) < 2097151) {
-            return;
+            return
         }
-        event.setCancelled(true);
-        plugin.getServer().getScheduler().runTask(plugin, () -> clearNBT(event.getPlayer()));
+
+        event.isCancelled = true
+        plugin.server.scheduler.runTask(plugin, Runnable { clearNBT(event.player) })
     }
 
-    private void clearNBT(Player player) {
-        player.getInventory().clear();
+    private fun clearNBT(player: Player) {
+        player.inventory.clear()
+
         player.sendMessage(
-            ChatColor.DARK_GRAY + "[" +
-                ChatColor.GRAY + plugin.getName() +
-                ChatColor.DARK_GRAY + "]" +
-                ChatColor.GOLD + ChatColor.BOLD + "Your inventory was cleared due to an NBT overload.");
+            Component.text("[", NamedTextColor.DARK_GRAY)
+                .append(Component.text(plugin.name, NamedTextColor.GRAY))
+                .append(Component.text("]", NamedTextColor.DARK_GRAY))
+                .append(
+                    Component.text(
+                        "Your inventory was cleared due to an NBT overload.",
+                        NamedTextColor.GOLD,
+                        TextDecoration.BOLD
+                    )
+                )
+        )
     }
-
 }

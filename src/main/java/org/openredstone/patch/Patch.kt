@@ -1,23 +1,19 @@
-package org.openredstone.patch;
+package org.openredstone.patch
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.entity.Player
+import org.bukkit.plugin.java.JavaPlugin
 
-public class Patch {
+open class Patch(val plugin: JavaPlugin) {
 
-    JavaPlugin plugin;
-
-    Patch(JavaPlugin plugin) {
-        this.plugin = plugin;
-    }
-
-    void sendMessage(Player player, String message) {
+    fun sendMessage(player: Player, message: String) {
         player.sendMessage(
-                ChatColor.DARK_GRAY + "[" +
-                ChatColor.GRAY + plugin.getName() +
-                ChatColor.DARK_GRAY + "] " +
-                ChatColor.GOLD + ChatColor.BOLD + message);
+            Component.text("[", NamedTextColor.DARK_GRAY)
+                .append(Component.text(plugin.name, NamedTextColor.GRAY))
+                .append(Component.text("] ", NamedTextColor.DARK_GRAY))
+                .append(Component.text(message, NamedTextColor.GOLD, TextDecoration.BOLD))
+        )
     }
-
 }

@@ -1,52 +1,61 @@
-package org.openredstone.protoLib;
+package org.openredstone.protoLib
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.reflect.StructureModifier;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.comphenix.protocol.PacketType
+import com.comphenix.protocol.events.ListenerPriority
+import com.comphenix.protocol.events.PacketAdapter
+import com.comphenix.protocol.events.PacketEvent
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.entity.Player
+import org.bukkit.plugin.java.JavaPlugin
+import kotlin.math.abs
 
-public class PlayerPositionPacketHandler extends PacketAdapter {
+class PlayerPositionPacketHandler(plugin: JavaPlugin) :
+    PacketAdapter(
+        plugin, ListenerPriority.HIGHEST,
+        PacketType.Play.Client.POSITION,
+        PacketType.Play.Client.POSITION_LOOK
+    ) {
 
-    private JavaPlugin plugin;
-
-    public PlayerPositionPacketHandler(JavaPlugin plugin) {
-        super(plugin, ListenerPriority.HIGHEST, PacketType.Play.Client.POSITION,
-            PacketType.Play.Client.POSITION_LOOK);
-        this.plugin = plugin;
-    }
-
-    @Override
-    public void onPacketReceiving(PacketEvent event) {
-        if (event.getPacketType() != PacketType.Play.Client.POSITION_LOOK &&
-            event.getPacketType() != PacketType.Play.Client.POSITION) {
-            return;
+    override fun onPacketReceiving(event: PacketEvent) {
+        if (event.packetType != PacketType.Play.Client.POSITION_LOOK &&
+            event.packetType != PacketType.Play.Client.POSITION
+        ) {
+            return
         }
-        StructureModifier<Double> doubles = event.getPacket().getDoubles();
-        double x = doubles.read(0);
-        double y = doubles.read(1);
-        double z = doubles.read(2);
+
+        val doubles = event.packet.doubles
+        val x = doubles.read(0)
+        val y = doubles.read(1)
+        val z = doubles.read(2)
+
         if (isValid(x) && isValid(y) && isValid(z)) {
-            return;
+            return
         }
-        event.setCancelled(true);
-        plugin.getServer().getScheduler().runTask(plugin, () -> fixPlayer(event.getPlayer()));
+
+        event.isCancelled = true
+        plugin.server.scheduler.runTask(plugin, Runnable { fixPlayer(event.player) })
     }
 
-    private void fixPlayer(Player player) {
-        player.teleport(player.getWorld().getSpawnLocation());
+    private fun fixPlayer(player: Player) {
+        player.teleport(player.world.spawnLocation)
+
         player.sendMessage(
-            ChatColor.DARK_GRAY + "[" +
-            ChatColor.GRAY + plugin.getName() +
-            ChatColor.DARK_GRAY + "] " +
-            ChatColor.GOLD + ChatColor.BOLD + "You were sent back to spawn due to an invalid location.");
+            Component.text("[", NamedTextColor.DARK_GRAY)
+                .append(Component.text(plugin.name, NamedTextColor.GRAY))
+                .append(Component.text("] ", NamedTextColor.DARK_GRAY))
+                .append(
+                    Component.text(
+                        "You were sent back to spawn due to an invalid location.",
+                        NamedTextColor.GOLD,
+                        TextDecoration.BOLD
+                    )
+                )
+        )
     }
 
-    private static boolean isValid(double d) {
-        return Double.isFinite(d) && Math.abs(d) < 3.0E7;
+    private companion object {
+        fun isValid(d: Double): Boolean = d.isFinite() && abs(d) < 3.0E7
     }
-
 }
