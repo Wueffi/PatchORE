@@ -8,12 +8,11 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.java.JavaPlugin
 import org.openredstone.patchore.PatchORE
 import de.tr7zw.nbtapi.NBTItem
 import org.openredstone.patchore.sendInfo
 
-class SpawnEggsPatch(val plugin: JavaPlugin) : Listener {
+class SpawnEggsPatch() : Listener {
 
     private val eggTypes: List<Material> = Material.entries.filter { it.key.key.endsWith("_egg") }
 

@@ -150,7 +150,7 @@ class PatchORE : JavaPlugin() {
             server.pluginManager.registerEvents(ExtendedPistonsPatch(this), this)
         }
         if (config.getBoolean("patches.spawneggs")) {
-            server.pluginManager.registerEvents(SpawnEggsPatch(this), this)
+            server.pluginManager.registerEvents(SpawnEggsPatch(), this)
         }
         if (config.getBoolean("patches.deathpotions")) {
             server.pluginManager.registerEvents(DeathPotionsPatch(), this)
