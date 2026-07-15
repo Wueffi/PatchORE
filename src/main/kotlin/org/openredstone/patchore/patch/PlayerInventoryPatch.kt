@@ -15,13 +15,8 @@ class PlayerInventoryPatch(plugin: JavaPlugin) :
     PacketAdapter(plugin, ListenerPriority.HIGHEST, PacketType.Play.Client.ENTITY_NBT_QUERY) {
 
     private val maxNbtBytes = PatchORE.config.getInt("nbt.max_size_bytes")
-    private val enabled = PatchORE.config.getBoolean("patches.playerinventorypatch")
 
     override fun onPacketReceiving(event: PacketEvent) {
-        if (!enabled) {
-            return
-        }
-
         if (event.packetType != PacketType.Play.Client.ENTITY_NBT_QUERY) {
             return
         }

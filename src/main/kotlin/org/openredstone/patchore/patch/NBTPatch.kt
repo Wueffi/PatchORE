@@ -8,14 +8,12 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.java.JavaPlugin
 import org.openredstone.patchore.PatchORE
 import org.openredstone.patchore.sendInfo
 
-class NBTPatch(val plugin: JavaPlugin) : Listener {
+class NBTPatch() : Listener {
 
     private val maxNbtBytes = PatchORE.config.getInt("nbt.max_size_bytes")
-    private val maxLoreLines = PatchORE.config.getInt("nbt.max_lore_lines")
 
     private val infoMSG = "The item's NBT Data was too complex and has been reset!"
 
@@ -23,14 +21,14 @@ class NBTPatch(val plugin: JavaPlugin) : Listener {
     fun onPlayerInteract(event: PlayerInteractEvent) {
         val item = event.item ?: return
         if (validateAndReset(item)) {
-            event.player.sendInfo(plugin, infoMSG)
+            event.player.sendInfo(infoMSG)
         }
     }
 
     @EventHandler
     fun onPlayerConsume(event: PlayerItemConsumeEvent) {
         if (validateAndReset(event.item)) {
-            event.player.sendInfo(plugin, infoMSG)
+            event.player.sendInfo(infoMSG)
         }
     }
 
@@ -39,19 +37,11 @@ class NBTPatch(val plugin: JavaPlugin) : Listener {
         val item = event.currentItem ?: return
         if (validateAndReset(item)) {
             event.inventory.setItem(event.slot, item)
-            (event.whoClicked as Player).sendInfo(plugin, infoMSG)
+            (event.whoClicked as Player).sendInfo(infoMSG)
         }
     }
 
     private fun validateAndReset(item: ItemStack): Boolean {
-        val meta = item.itemMeta ?: return false
-
-        val lore = meta.lore
-        if (lore != null && lore.size > maxLoreLines) {
-            resetItem(item)
-            return true
-        }
-
         val nbtSize = item.serializeAsBytes().size
         if (nbtSize > maxNbtBytes) {
             resetItem(item)

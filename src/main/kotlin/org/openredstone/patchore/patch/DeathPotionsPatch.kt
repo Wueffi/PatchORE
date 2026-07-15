@@ -7,13 +7,12 @@ import org.bukkit.event.entity.LingeringPotionSplashEvent
 import org.bukkit.event.entity.PotionSplashEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.meta.PotionMeta
-import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.openredstone.patchore.PatchORE
 import org.openredstone.patchore.sendInfo
 
-class DeathPotionsPatch(val plugin: JavaPlugin) : Listener {
+class DeathPotionsPatch() : Listener {
 
     private val maxAmplifier = PatchORE.config.getInt("deathpotions.max_amplifier")
     private val maxDuration = PatchORE.config.getInt("deathpotions.max_duration")
@@ -65,7 +64,7 @@ class DeathPotionsPatch(val plugin: JavaPlugin) : Listener {
         }
 
         event.isCancelled = true
-        event.player.sendInfo(plugin, "We just saved you from possible death. You're welcome.")
+        event.player.sendInfo("We just saved you from possible death. You're welcome.")
     }
 
     @EventHandler

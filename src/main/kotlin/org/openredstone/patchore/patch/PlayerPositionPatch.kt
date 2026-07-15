@@ -19,13 +19,7 @@ class PlayerPositionPatch(plugin: JavaPlugin) :
         PacketType.Play.Client.POSITION_LOOK
     ) {
 
-    private val enabled = PatchORE.config.getBoolean("patches.playerpositionpatch")
-
     override fun onPacketReceiving(event: PacketEvent) {
-        if (!enabled) {
-            return
-        }
-
         if (event.packetType != PacketType.Play.Client.POSITION_LOOK &&
             event.packetType != PacketType.Play.Client.POSITION
         ) {

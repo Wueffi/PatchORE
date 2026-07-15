@@ -131,7 +131,6 @@ class PatchORE : JavaPlugin() {
 
         // NBT options
         "nbt.max_size_bytes" to 65536,  // 64 KB
-        "nbt.max_lore_lines" to 3,
     )
 
     override fun onEnable() {
@@ -145,7 +144,7 @@ class PatchORE : JavaPlugin() {
             server.pluginManager.registerEvents(FireworksPatch(this), this)
         }
         if (config.getBoolean("patches.enchantments")) {
-            server.pluginManager.registerEvents(EnchantmentsPatch(this), this)
+            server.pluginManager.registerEvents(EnchantmentsPatch(), this)
         }
         if (config.getBoolean("patches.extendedpistons")) {
             server.pluginManager.registerEvents(ExtendedPistonsPatch(this), this)
@@ -154,17 +153,19 @@ class PatchORE : JavaPlugin() {
             server.pluginManager.registerEvents(SpawnEggsPatch(this), this)
         }
         if (config.getBoolean("patches.deathpotions")) {
-            server.pluginManager.registerEvents(DeathPotionsPatch(this), this)
+            server.pluginManager.registerEvents(DeathPotionsPatch(), this)
         }
-        if (config.getBoolean("patches.void")) {
+        if (config.getBoolean("patches.playerposition")) {
             protocolManager.addPacketListener(PlayerPositionPatch(this))
         }
-        if (config.getBoolean("patches.nbt")) {
+        if (config.getBoolean("patches.playerinventory")) {
             protocolManager.addPacketListener(PlayerInventoryPatch(this))
-            server.pluginManager.registerEvents(NBTPatch(this), this)
+        }
+        if (config.getBoolean("patches.nbt")) {
+            server.pluginManager.registerEvents(NBTPatch(), this)
         }
         if (config.getBoolean("patches.inventoryinjection")) {
-            server.pluginManager.registerEvents(InventoryInjectionPatch(this), this)
+            server.pluginManager.registerEvents(InventoryInjectionPatch(), this)
         }
     }
 

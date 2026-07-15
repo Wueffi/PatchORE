@@ -24,8 +24,7 @@ dependencies {
 
 tasks {
     shadowJar {
-        // Avoid clobbering another plugin's relocated Kotlin classes on the classpath
-        relocate("kotlin", "org.openredstone.libs.kotlin")
+        relocate("kotlin", "org.openredstone.patchore.libs.kotlin")
         archiveClassifier.set("")
     }
     runServer {

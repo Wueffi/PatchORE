@@ -45,7 +45,7 @@ class SpawnEggsPatch(val plugin: JavaPlugin) : Listener {
             return
         }
 
-        event.player.sendInfo(plugin, "Yeah, no. Enjoy your fixed egg.")
+        event.player.sendInfo("Yeah, no. Enjoy your fixed egg.")
 
         event.isCancelled = true
         val replacement = ItemStack(item.type)

@@ -35,7 +35,7 @@ class ExtendedPistonsPatch(val plugin: JavaPlugin) : Listener {
         event.isCancelled = true
         setBlockPlaced(placeLocation, material, facing)
 
-        event.player.sendInfo(plugin, "Now that is one long piston.")
+        event.player.sendInfo("Now that is one long piston.")
     }
 
     private fun setBlockPlaced(location: Location, material: Material, facing: BlockFace) {

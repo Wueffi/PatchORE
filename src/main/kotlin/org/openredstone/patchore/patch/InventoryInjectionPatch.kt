@@ -6,10 +6,9 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.java.JavaPlugin
 import org.openredstone.patchore.sendInfo
 
-class InventoryInjectionPatch(val plugin: JavaPlugin) : Listener {
+class InventoryInjectionPatch() : Listener {
 
     @EventHandler
     fun onPlayerInteractEntity(event: PlayerInteractEntityEvent) {
@@ -21,7 +20,7 @@ class InventoryInjectionPatch(val plugin: JavaPlugin) : Listener {
             return
         }
 
-        targetEntity.sendInfo(plugin, "An item was blocked from being added to your inventory.")
+        targetEntity.sendInfo("An item was blocked from being added to your inventory.")
 
         event.isCancelled = true
     }
