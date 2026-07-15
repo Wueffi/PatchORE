@@ -1,4 +1,4 @@
-package org.openredstone.patch
+package org.openredstone.patchore.patch
 
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
@@ -10,9 +10,10 @@ import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import org.openredstone.PatchORE
+import org.openredstone.patchore.PatchORE
+import org.openredstone.patchore.sendInfo
 
-class DeathPotionsPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
+class DeathPotionsPatch(val plugin: JavaPlugin) : Listener {
 
     private val maxAmplifier = PatchORE.config.getInt("deathpotions.max_amplifier")
     private val maxDuration = PatchORE.config.getInt("deathpotions.max_duration")
@@ -64,7 +65,7 @@ class DeathPotionsPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
         }
 
         event.isCancelled = true
-        sendMessage(event.player, "We just saved you from possible death. You're welcome.")
+        event.player.sendInfo(plugin, "We just saved you from possible death. You're welcome.")
     }
 
     @EventHandler

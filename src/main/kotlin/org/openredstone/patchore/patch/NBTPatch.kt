@@ -1,5 +1,6 @@
-package org.openredstone.patch
+package org.openredstone.patchore.patch
 
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -8,9 +9,10 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
-import org.openredstone.PatchORE
+import org.openredstone.patchore.PatchORE
+import org.openredstone.patchore.sendInfo
 
-class NBTPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
+class NBTPatch(val plugin: JavaPlugin) : Listener {
 
     private val maxNbtBytes = PatchORE.config.getInt("nbt.max_size_bytes")
     private val maxLoreLines = PatchORE.config.getInt("nbt.max_lore_lines")
@@ -21,14 +23,14 @@ class NBTPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
     fun onPlayerInteract(event: PlayerInteractEvent) {
         val item = event.item ?: return
         if (validateAndReset(item)) {
-            sendMessage(event.player, infoMSG)
+            event.player.sendInfo(plugin, infoMSG)
         }
     }
 
     @EventHandler
     fun onPlayerConsume(event: PlayerItemConsumeEvent) {
         if (validateAndReset(event.item)) {
-            sendMessage(event.player, infoMSG)
+            event.player.sendInfo(plugin, infoMSG)
         }
     }
 
@@ -37,7 +39,7 @@ class NBTPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
         val item = event.currentItem ?: return
         if (validateAndReset(item)) {
             event.inventory.setItem(event.slot, item)
-            sendMessage(event.whoClicked as Player, infoMSG)
+            (event.whoClicked as Player).sendInfo(plugin, infoMSG)
         }
     }
 
@@ -60,7 +62,7 @@ class NBTPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
     }
 
     private fun resetItem(item: ItemStack) {
-        val newMeta = org.bukkit.Bukkit.getItemFactory().getItemMeta(item.type) ?: return
+        val newMeta = Bukkit.getItemFactory().getItemMeta(item.type) ?: return
         item.itemMeta = newMeta
         item.amount = 1
     }

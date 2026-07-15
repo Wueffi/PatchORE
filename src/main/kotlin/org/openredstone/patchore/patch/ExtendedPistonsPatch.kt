@@ -1,4 +1,4 @@
-package org.openredstone.patch
+package org.openredstone.patchore.patch
 
 import org.bukkit.Location
 import org.bukkit.Material
@@ -10,8 +10,9 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
+import org.openredstone.patchore.sendInfo
 
-class ExtendedPistonsPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
+class ExtendedPistonsPatch(val plugin: JavaPlugin) : Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onBlockPlace(event: BlockPlaceEvent) {
@@ -34,7 +35,7 @@ class ExtendedPistonsPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
         event.isCancelled = true
         setBlockPlaced(placeLocation, material, facing)
 
-        sendMessage(event.player, "Now that is one long piston.")
+        event.player.sendInfo(plugin, "Now that is one long piston.")
     }
 
     private fun setBlockPlaced(location: Location, material: Material, facing: BlockFace) {

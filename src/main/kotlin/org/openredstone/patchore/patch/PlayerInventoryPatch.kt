@@ -1,4 +1,4 @@
-package org.openredstone.protoLib
+package org.openredstone.patchore.patch
 
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.events.ListenerPriority
@@ -9,14 +9,19 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
-import org.openredstone.PatchORE
+import org.openredstone.patchore.PatchORE
 
-class PlayerInventoryPacketHandler(plugin: JavaPlugin) :
+class PlayerInventoryPatch(plugin: JavaPlugin) :
     PacketAdapter(plugin, ListenerPriority.HIGHEST, PacketType.Play.Client.ENTITY_NBT_QUERY) {
 
     private val maxNbtBytes = PatchORE.config.getInt("nbt.max_size_bytes")
+    private val enabled = PatchORE.config.getBoolean("patches.playerinventorypatch")
 
     override fun onPacketReceiving(event: PacketEvent) {
+        if (!enabled) {
+            return
+        }
+
         if (event.packetType != PacketType.Play.Client.ENTITY_NBT_QUERY) {
             return
         }

@@ -1,4 +1,4 @@
-package org.openredstone.patch
+package org.openredstone.patchore.patch
 
 import de.tr7zw.nbtapi.NBTType
 import org.bukkit.Material
@@ -9,10 +9,11 @@ import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
-import org.openredstone.PatchORE
+import org.openredstone.patchore.PatchORE
 import de.tr7zw.nbtapi.NBTItem
+import org.openredstone.patchore.sendInfo
 
-class SpawnEggsPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
+class SpawnEggsPatch(val plugin: JavaPlugin) : Listener {
 
     private val eggTypes: List<Material> = Material.entries.filter { it.key.key.endsWith("_egg") }
 
@@ -44,7 +45,7 @@ class SpawnEggsPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
             return
         }
 
-        sendMessage(event.player, "Yeah, no. Enjoy your fixed egg.")
+        event.player.sendInfo(plugin, "Yeah, no. Enjoy your fixed egg.")
 
         event.isCancelled = true
         val replacement = ItemStack(item.type)

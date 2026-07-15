@@ -1,1 +1,1 @@
-rootProject.name = "Kotlin PatchORE"
+rootProject.name = "PatchORE"

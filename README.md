@@ -1,5 +1,5 @@
 
-## Kotlin PatchORE
+## PatchORE
 This fixes things. Said things were either "broken" or a big nuissance on our creative network.
 
 ##### Current fixes:

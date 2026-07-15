@@ -1,12 +1,18 @@
-package org.openredstone
+package org.openredstone.patchore
 
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.plugin.java.JavaPlugin
-import org.openredstone.patch.*
-import org.openredstone.protoLib.PlayerPositionPacketHandler
-import org.openredstone.protoLib.PlayerInventoryPacketHandler
+import org.openredstone.patchore.patch.DeathPotionsPatch
+import org.openredstone.patchore.patch.EnchantmentsPatch
+import org.openredstone.patchore.patch.ExtendedPistonsPatch
+import org.openredstone.patchore.patch.FireworksPatch
+import org.openredstone.patchore.patch.InventoryInjectionPatch
+import org.openredstone.patchore.patch.NBTPatch
+import org.openredstone.patchore.patch.SpawnEggsPatch
+import org.openredstone.patchore.patch.PlayerPositionPatch
+import org.openredstone.patchore.patch.PlayerInventoryPatch
 
 import java.io.File
 import java.util.logging.Level
@@ -29,6 +35,8 @@ class PatchORE : JavaPlugin() {
         "patches.void" to true,
         "patches.nbt" to true,
         "patches.inventoryinjection" to true,
+        "patches.playerinventory" to true,
+        "patches.playerposition" to true,
 
         // Fireworks options
         "fireworks.power" to 5,
@@ -137,7 +145,7 @@ class PatchORE : JavaPlugin() {
             server.pluginManager.registerEvents(FireworksPatch(this), this)
         }
         if (config.getBoolean("patches.enchantments")) {
-            server.pluginManager.registerEvents(EnchantmentPatch(this), this)
+            server.pluginManager.registerEvents(EnchantmentsPatch(this), this)
         }
         if (config.getBoolean("patches.extendedpistons")) {
             server.pluginManager.registerEvents(ExtendedPistonsPatch(this), this)
@@ -149,10 +157,10 @@ class PatchORE : JavaPlugin() {
             server.pluginManager.registerEvents(DeathPotionsPatch(this), this)
         }
         if (config.getBoolean("patches.void")) {
-            protocolManager.addPacketListener(PlayerPositionPacketHandler(this))
+            protocolManager.addPacketListener(PlayerPositionPatch(this))
         }
         if (config.getBoolean("patches.nbt")) {
-            protocolManager.addPacketListener(PlayerInventoryPacketHandler(this))
+            protocolManager.addPacketListener(PlayerInventoryPatch(this))
             server.pluginManager.registerEvents(NBTPatch(this), this)
         }
         if (config.getBoolean("patches.inventoryinjection")) {

@@ -1,4 +1,4 @@
-package org.openredstone.protoLib
+package org.openredstone.patchore.patch
 
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.events.ListenerPriority
@@ -9,16 +9,23 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import org.openredstone.patchore.PatchORE
 import kotlin.math.abs
 
-class PlayerPositionPacketHandler(plugin: JavaPlugin) :
+class PlayerPositionPatch(plugin: JavaPlugin) :
     PacketAdapter(
         plugin, ListenerPriority.HIGHEST,
         PacketType.Play.Client.POSITION,
         PacketType.Play.Client.POSITION_LOOK
     ) {
 
+    private val enabled = PatchORE.config.getBoolean("patches.playerpositionpatch")
+
     override fun onPacketReceiving(event: PacketEvent) {
+        if (!enabled) {
+            return
+        }
+
         if (event.packetType != PacketType.Play.Client.POSITION_LOOK &&
             event.packetType != PacketType.Play.Client.POSITION
         ) {

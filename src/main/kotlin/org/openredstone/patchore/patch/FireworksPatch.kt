@@ -1,4 +1,4 @@
-package org.openredstone.patch
+package org.openredstone.patchore.patch
 
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.meta.FireworkMeta
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
-import org.openredstone.PatchORE
+import org.openredstone.patchore.PatchORE
 
-class FireworksPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
+class FireworksPatch(val plugin: JavaPlugin) : Listener {
 
     private var fireworkCount = 0
     private val maxCount = PatchORE.config.getInt("fireworks.count")

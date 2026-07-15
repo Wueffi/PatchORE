@@ -1,12 +1,14 @@
-package org.openredstone.patch
+package org.openredstone.patchore.patch
 
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.plugin.java.JavaPlugin
-import org.openredstone.PatchORE
+import org.openredstone.patchore.PatchORE
+import org.openredstone.patchore.sendInfo
+import kotlin.collections.iterator
 
-class EnchantmentPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
+class EnchantmentsPatch(val plugin: JavaPlugin) : Listener {
 
     @EventHandler
     fun onItemUse(event: PlayerInteractEvent) {
@@ -33,7 +35,7 @@ class EnchantmentPatch(plugin: JavaPlugin) : Patch(plugin), Listener {
         }
 
         if (sendWarning) {
-            sendMessage(event.player, "We just filtOREd your enchantments :o")
+            event.player.sendInfo(plugin, "We just filtOREd your enchantments :o")
         }
     }
 }
